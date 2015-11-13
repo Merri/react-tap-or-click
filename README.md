@@ -16,7 +16,7 @@ scrolled or depend on any touch functionality other than clicks.
 
 ### Babel and JSX
 
-```
+```jsx
 'use strict'
 import React from 'react'
 import tapOrClick from 'react-tap-or-click'
@@ -38,7 +38,7 @@ export default YourComponent
 
 ### ES5
 
-```
+```js
 'use strict'
 var React = require('react')
 var tapOrClick = require('react-tap-or-click')
