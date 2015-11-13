@@ -35,24 +35,28 @@ function getCallbackHandlers(callback) {
     if (!handler) {
         var state = {}
 
+        function resetState() {
+            state.touchClick = false
+            state.touchTimeout = null
+        }
+
         handler = {
             callback: callback,
             touchStart: function(event) {
                 if (event.defaultPrevented) {
                     return
                 }
-
                 clearTimeout(state.touchTimeout)
                 state.touchClick = true
-                callback(event)
+                state.touchTimeout = setTimeout(resetState, 200)
             },
             touchEnd: function(event) {
-                if (state.touchClick) {
-                    state.touchTimeout = setTimeout(function() {
-                        state.touchClick = false
-                        state.touchTimeout = null
-                    }, 300)
+                if (event.defaultPrevented || !state.touchClick) {
+                    return
                 }
+                clearTimeout(state.touchTimeout)
+                callback(event)
+                state.touchTimeout = setTimeout(resetState, 300)
             },
             click: function(event) {
                 if (event.defaultPrevented || state.touchClick) {
@@ -69,6 +73,10 @@ function getCallbackHandlers(callback) {
 }
 
 module.exports = function tapOrClick(callback, props) {
+    if (!isFunction(callback)) {
+        throw new Error('First argument to tapOrClick must be a callback function')
+    }
+
     if (props == null) {
         props = {}
     } else if (typeof props !== 'object') {
