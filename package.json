@@ -1,0 +1,30 @@
+{
+  "name": "react-tap-or-click",
+  "version": "0.0.1",
+  "description": "Minimal and easy to use mobile click solution for React",
+  "main": "index.js",
+  "scripts": {
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/merri/react-tap-or-click.git"
+  },
+  "author": "Vesa Piittinen",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/merri/react-tap-or-click/issues"
+  },
+  "homepage": "https://github.com/merri/react-tap-or-click/",
+  "keywords": [
+    "react",
+    "click",
+    "fastclick",
+    "onClick",
+    "onTapEvent",
+    "onTouchStart",
+    "onTouchEnd",
+    "tap"
+  ],
+  "devDependencies": {
+  }
+}
