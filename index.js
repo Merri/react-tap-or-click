@@ -55,6 +55,7 @@ function getCallbackHandlers(callback) {
                     return
                 }
                 clearTimeout(state.touchTimeout)
+                event.preventDefault()
                 callback(event)
                 state.touchTimeout = setTimeout(resetState, 300)
             },
