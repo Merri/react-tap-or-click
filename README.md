@@ -5,10 +5,16 @@ problem such as [fastclick](https://github.com/ftlabs/fastclick) and
 [react-tap-event-plugin](https://github.com/zilverline/react-tap-event-plugin).
 
 `tapOrClick` is the simplest solution to the problem: it triggers a given callback when `onTouchEnd` is
-triggered, or `onClick` if there are no touch events. This covers most use cases where you simply want a click.
+triggered, or `onClick` if there are no touch events. This probably covers all use cases where you simply want an
+immediate click.
 
 In addition `tapOrClick` hides the complexity of the issue so you don't need to think about what kind of hellish
-wizardry needs to be done just to get an immediate click!
+wizardry needs to be done just to get an immediate click! `tapOrClick` is scrolling aware and does not trigger clicks
+when scrolling. Also, [ghost clicks](http://ariatemplates.com/blog/2014/05/ghost-clicks-in-mobile-browsers/) are busted.
+
+This utility has been designed to be easy to use with React, but you can use it elsewhere; it just might not be as
+convenient as with React. If you wish to have easier support for your use case then please open a new issue and we'll
+see what can be done!
 
 ## How?
 
@@ -68,7 +74,7 @@ module.exports = YourComponent
 
 ## Why?
 
-1. Because about 2 kB of non-minified code (1 kB minified) should be enough to solve this problem.
+1. Because about 4 kB of non-minified code (2.3 kB minified) should be enough to solve this problem.
 2. `fastclick` causes nasty side effects and hard-to-understand bugs when used with React.
 3. `react-tap-event-plugin` contains a lot of code, may require you to build your own minified React bundle and you
 have to define two handlers for the same thing (`onTapEvent` and `onClick`).
@@ -79,4 +85,5 @@ have to define two handlers for the same thing (`onTapEvent` and `onClick`).
 - Any existing `onTouchStart`, `onTouchEnd` or `onClick` will be overwritten.
 - Up to 10000 callbacks are cached at once. Cache is flushed if going over limit. You may have a design flaw if you hit
 this size on a regular page. This is warned about with a normal `console.log`.
-- This markdown file is bigger than the code. So go ahead and study it.
+- The code could be more compact if it had less abstractions; the current code ought to be readable enough so you can
+understand it, too!
