@@ -7,6 +7,7 @@ function addBuster(touchEvent) {
     if (!touchEvent || !('changedTouches' in touchEvent)) {
         throw new Error('No event or no changedTouches in event object')
     }
+
     bustableClicks.push({
         element: touchEvent.target,
         x: touchEvent.changedTouches[0].screenX,
@@ -81,16 +82,24 @@ function createHandlers(callback) {
             clearTimeout(state.touchTimeout)
             state.touches++
             state.touchTimeout = setTimeout(endTouch.bind(event.target, state), 250)
+            state.x = event.changedTouches[0].screenX
+            state.y = event.changedTouches[0].screenY
         },
         touchEnd: function(event) {
             if (event.defaultPrevented || state.touches !== 1) {
                 return
             }
-            clearTimeout(state.touchTimeout)
-            addBuster(event)
-            event.preventDefault()
-            callback(event)
-            state.touchTimeout = setTimeout(endTouch.bind(event.target, state), 425)
+
+            var deltaX = state.x - event.changedTouches[0].screenX
+            var deltaY = state.y - event.changedTouches[0].screenY
+
+            if (Math.abs(deltaX) < 5 && Math.abs(deltaY) < 5) {
+                clearTimeout(state.touchTimeout)
+                addBuster(event)
+                event.preventDefault()
+                callback(event)
+                state.touchTimeout = setTimeout(endTouch.bind(event.target, state), 425)
+            }
         },
         click: function(event) {
             if (event.defaultPrevented || state.touches > 0) {

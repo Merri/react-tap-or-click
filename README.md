@@ -4,11 +4,11 @@ You know. That 300ms tap delay. This problem has been around for quite a while a
 problem such as [fastclick](https://github.com/ftlabs/fastclick) and
 [react-tap-event-plugin](https://github.com/zilverline/react-tap-event-plugin).
 
-`tapOrClick` is the simplest solution to the problem: it triggers a given callback when `onTouchStart` is
+`tapOrClick` is the simplest solution to the problem: it triggers a given callback when `onTouchEnd` is
 triggered, or `onClick` if there are no touch events. This covers most use cases where you simply want a click.
 
-`tapOrClick` is ideal for all normal buttons and triggers. It is **not** ideal for components that are dragged,
-scrolled or depend on any touch functionality other than clicks.
+In addition `tapOrClick` hides the complexity of the issue so you don't need to think about what kind of hellish
+wizardry needs to be done just to get an immediate click!
 
 ## How?
 
