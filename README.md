@@ -23,7 +23,6 @@ see what can be done!
 ### Babel and JSX
 
 ```jsx
-'use strict'
 import React from 'react'
 import tapOrClick from 'react-tap-or-click'
 
