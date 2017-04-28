@@ -1,3 +1,5 @@
+'use strict'
+
 var isFunction = (function() {
     function typeOfFn(fn) {
         return typeof fn === 'function'
@@ -33,29 +35,24 @@ function getCallbackHandlers(callback) {
     if (!handler) {
         var state = {}
 
-        function resetState() {
-            state.touchClick = false
-            state.touchTimeout = null
-        }
-
         handler = {
             callback: callback,
             touchStart: function(event) {
                 if (event.defaultPrevented) {
                     return
                 }
+
                 clearTimeout(state.touchTimeout)
                 state.touchClick = true
-                state.touchTimeout = setTimeout(resetState, 200)
+                callback(event)
             },
             touchEnd: function(event) {
-                if (event.defaultPrevented || !state.touchClick) {
-                    return
+                if (state.touchClick) {
+                    state.touchTimeout = setTimeout(function() {
+                        state.touchClick = false
+                        state.touchTimeout = null
+                    }, 300)
                 }
-                clearTimeout(state.touchTimeout)
-                event.preventDefault()
-                callback(event)
-                state.touchTimeout = setTimeout(resetState, 300)
             },
             click: function(event) {
                 if (event.defaultPrevented || state.touchClick) {
@@ -71,27 +68,28 @@ function getCallbackHandlers(callback) {
     return handler
 }
 
-module.exports = function tapOrClick(callback, props) {
-    // event handlers are unnecessary server side
-    if (typeof window === 'undefined') {
-        return {}
+// event handlers are unnecessary server side
+if (typeof window === 'undefined') {
+    module.exports = function(callback, props) {
+        if (props == null) {
+            props = {}
+        }
+        return props
     }
+} else {
+    module.exports = function tapOrClick(callback, props) {
+        if (props == null) {
+            props = {}
+        } else if (typeof props !== 'object') {
+            throw new Error('Optional second argument to tapOrClick must be a mutable object')
+        }
 
-    if (!isFunction(callback)) {
-        throw new Error('First argument to tapOrClick must be a callback function')
+        var handlers = getCallbackHandlers(callback)
+
+        props.onTouchStart = handlers.touchStart
+        props.onTouchEnd = handlers.touchEnd
+        props.onClick = handlers.click
+
+        return props
     }
-
-    if (props == null) {
-        props = {}
-    } else if (typeof props !== 'object') {
-        throw new Error('Optional second argument to tapOrClick must be a mutable object')
-    }
-
-    var handlers = getCallbackHandlers(callback)
-
-    props.onTouchStart = handlers.touchStart
-    props.onTouchEnd = handlers.touchEnd
-    props.onClick = handlers.click
-
-    return props
 }
