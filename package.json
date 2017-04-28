@@ -1,6 +1,6 @@
 {
   "name": "react-tap-or-click",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Minimal and easy to use mobile click solution for React",
   "main": "index.js",
   "scripts": {
